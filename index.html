@@ -3,112 +3,105 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Quick Tools - Premium Glass</title>
+<title>AllinOneTools - Free Online Tools</title>
+<meta name="description" content="AllinOneTools - Stopwatch, Timer, Age Calculator, Tap Counter & More. Free online tools for everyone.">
+<meta name="keywords" content="stopwatch, timer, countdown, age calculator, tap counter, free online tools">
+<meta name="author" content="AllinOneTools">
 <style>
     body {
-        font-family: Arial, sans-serif;
-        background: linear-gradient(135deg, #0f0f0f, #1a1a1a);
-        color: white;
         margin: 0;
-        padding: 0;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
+        font-family: 'Segoe UI', sans-serif;
+        background: linear-gradient(135deg, #0a0a0a, #0f2010);
+        color: white;
+        text-align: center;
         min-height: 100vh;
+        padding: 0;
     }
     header {
-        font-size: 2em;
-        margin: 20px;
+        padding: 20px;
+        font-size: 2.5em;
         font-weight: bold;
-        color: gold;
-        text-shadow: 0 0 10px rgba(255, 215, 0, 0.7);
+        color: #00ff88;
+        text-shadow: 0 0 10px #00ff88, 0 0 20px #00ff88;
     }
     .container {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
         gap: 20px;
-        width: 90%;
-        max-width: 1200px;
+        padding: 20px;
     }
     .tool {
-        background: rgba(255, 255, 255, 0.05);
+        background: rgba(0, 50, 20, 0.2);
+        backdrop-filter: blur(10px);
         border-radius: 15px;
         padding: 20px;
-        text-align: center;
-        backdrop-filter: blur(10px);
-        box-shadow: 0 0 20px rgba(255, 215, 0, 0.1);
+        box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
     }
     button {
-        background: gold;
+        padding: 10px 20px;
+        font-size: 16px;
+        background: #00ff88;
         color: black;
         border: none;
-        padding: 10px 20px;
-        margin: 5px;
-        border-radius: 10px;
-        font-size: 1em;
+        border-radius: 8px;
         cursor: pointer;
         font-weight: bold;
     }
     button:hover {
-        background: orange;
-    }
-    .big-button {
-        font-size: 1.5em;
-        padding: 20px 40px;
-        border-radius: 15px;
-        background: gold;
-        box-shadow: 0 0 20px gold;
+        background: #00cc66;
     }
     input {
         padding: 8px;
-        margin: 5px;
         border-radius: 5px;
         border: none;
-        outline: none;
+        margin-top: 10px;
+        font-size: 14px;
+        width: 80%;
     }
-    .display {
-        font-size: 1.5em;
-        margin: 10px 0;
+    .big-btn {
+        font-size: 24px;
+        padding: 20px 40px;
     }
 </style>
 </head>
 <body>
-
-<header>⚡ Quick Tools - Premium Glass</header>
+<header>AllinOneTools</header>
 
 <div class="container">
 
     <!-- Stopwatch -->
     <div class="tool">
-        <h2>⏱ Stopwatch</h2>
-        <div class="display" id="stopwatch">00:00:00</div>
+        <h2>Stopwatch</h2>
+        <div id="stopwatch">00:00:00</div>
         <button onclick="startStopwatch()">Start</button>
         <button onclick="stopStopwatch()">Stop</button>
         <button onclick="resetStopwatch()">Reset</button>
     </div>
 
-    <!-- Tap Counter -->
+    <!-- Timer -->
     <div class="tool">
-        <h2>👆 Tap Counter</h2>
-        <div class="display" id="tapCount">0</div>
-        <button class="big-button" onclick="tap()">TAP</button>
-        <button onclick="resetTap()">Reset</button>
+        <h2>Countdown Timer</h2>
+        <input type="number" id="timerInput" placeholder="Seconds">
+        <div id="timerDisplay">00:00</div>
+        <button onclick="startTimer()">Start</button>
+        <button onclick="resetTimer()">Reset</button>
+        <audio id="beep" src="https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg"></audio>
     </div>
 
     <!-- Age Calculator -->
     <div class="tool">
-        <h2>🎂 Age Calculator</h2>
-        <input type="date" id="birthdate">
+        <h2>Age Calculator</h2>
+        <input type="date" id="birthDate">
         <button onclick="calculateAge()">Calculate</button>
-        <div class="display" id="ageResult">Your age will appear here</div>
+        <div id="ageResult"></div>
     </div>
 
-    <!-- Countdown Timer -->
+    <!-- Tap Counter -->
     <div class="tool">
-        <h2>⏳ Countdown Timer</h2>
-        <input type="number" id="minutes" placeholder="Minutes">
-        <button onclick="startCountdown()">Start</button>
-        <div class="display" id="countdown">00:00</div>
+        <h2>Tap Counter</h2>
+        <div id="tapCount">0</div>
+        <button class="big-btn" onclick="tapCounter()">TAP</button>
+        <button onclick="resetTap()">Reset</button>
     </div>
 
 </div>
@@ -116,14 +109,13 @@
 <script>
     // Stopwatch
     let swInterval, swSeconds = 0;
-    function updateStopwatch() {
-        let hrs = String(Math.floor(swSeconds / 3600)).padStart(2, '0');
-        let mins = String(Math.floor((swSeconds % 3600) / 60)).padStart(2, '0');
-        let secs = String(swSeconds % 60).padStart(2, '0');
-        document.getElementById("stopwatch").textContent = `${hrs}:${mins}:${secs}`;
-    }
     function startStopwatch() {
-        if (!swInterval) swInterval = setInterval(() => { swSeconds++; updateStopwatch(); }, 1000);
+        if (!swInterval) {
+            swInterval = setInterval(() => {
+                swSeconds++;
+                document.getElementById("stopwatch").innerText = new Date(swSeconds * 1000).toISOString().substr(11, 8);
+            }, 1000);
+        }
     }
     function stopStopwatch() {
         clearInterval(swInterval);
@@ -132,47 +124,54 @@
     function resetStopwatch() {
         stopStopwatch();
         swSeconds = 0;
-        updateStopwatch();
+        document.getElementById("stopwatch").innerText = "00:00:00";
     }
 
-    // Tap Counter
-    let taps = 0;
-    function tap() {
-        taps++;
-        document.getElementById("tapCount").textContent = taps;
+    // Timer
+    let timerInterval, timerTime = 0;
+    function startTimer() {
+        timerTime = parseInt(document.getElementById("timerInput").value);
+        if (isNaN(timerTime) || timerTime <= 0) return;
+        clearInterval(timerInterval);
+        updateTimerDisplay();
+        timerInterval = setInterval(() => {
+            timerTime--;
+            updateTimerDisplay();
+            if (timerTime <= 0) {
+                clearInterval(timerInterval);
+                document.getElementById("beep").play();
+            }
+        }, 1000);
     }
-    function resetTap() {
-        taps = 0;
-        document.getElementById("tapCount").textContent = taps;
+    function resetTimer() {
+        clearInterval(timerInterval);
+        document.getElementById("timerDisplay").innerText = "00:00";
+    }
+    function updateTimerDisplay() {
+        let m = String(Math.floor(timerTime / 60)).padStart(2, "0");
+        let s = String(timerTime % 60).padStart(2, "0");
+        document.getElementById("timerDisplay").innerText = `${m}:${s}`;
     }
 
     // Age Calculator
     function calculateAge() {
-        let birthdate = document.getElementById("birthdate").value;
-        if (!birthdate) return alert("Please select your birth date!");
-        let diff = Date.now() - new Date(birthdate).getTime();
+        let birthDate = new Date(document.getElementById("birthDate").value);
+        if (!birthDate.getTime()) return;
+        let diff = new Date() - birthDate;
         let ageDate = new Date(diff);
-        let age = Math.abs(ageDate.getUTCFullYear() - 1970);
-        document.getElementById("ageResult").textContent = `You are ${age} years old.`;
+        let years = ageDate.getUTCFullYear() - 1970;
+        document.getElementById("ageResult").innerText = `You are ${years} years old.`;
     }
 
-    // Countdown Timer
-    let cdInterval;
-    function startCountdown() {
-        let mins = parseInt(document.getElementById("minutes").value);
-        if (isNaN(mins) || mins <= 0) return alert("Enter valid minutes!");
-        let seconds = mins * 60;
-        clearInterval(cdInterval);
-        cdInterval = setInterval(() => {
-            let m = String(Math.floor(seconds / 60)).padStart(2, '0');
-            let s = String(seconds % 60).padStart(2, '0');
-            document.getElementById("countdown").textContent = `${m}:${s}`;
-            if (seconds <= 0) {
-                clearInterval(cdInterval);
-                alert("Time's up!");
-            }
-            seconds--;
-        }, 1000);
+    // Tap Counter
+    let taps = 0;
+    function tapCounter() {
+        taps++;
+        document.getElementById("tapCount").innerText = taps;
+    }
+    function resetTap() {
+        taps = 0;
+        document.getElementById("tapCount").innerText = 0;
     }
 </script>
 
