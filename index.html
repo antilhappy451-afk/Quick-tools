@@ -1,347 +1,180 @@
-<!--
-Premium Web Tools — Single-file HTML
-Features:
-- Stopwatch
-- Tap Counter
-- Age Calculator
-- Countdown Timer
-- Responsive, mobile-first, premium dark theme
-- Easy-to-edit comments and AdSense placeholder
-
-How to use:
-- Paste this whole file as `index.html` on GitHub Pages OR
-- In Blogger create a new page, switch to HTML view and paste the content (for best results use a static page template) OR
-- Host on any static host.
-
-Customize: search for `/* CUSTOMIZE */` comments.
--->
-
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>QuickTools — Stopwatch · Tap Counter · Age Calculator · Timer</title>
-  <meta name="description" content="Fast, mobile-first tools: Stopwatch, Tap Counter, Age Calculator and Countdown Timer — premium look, free to use." />
-  <link rel="icon" href="data:;base64,iVBORw0KGgo=" />
-  <style>
-    :root{
-      --bg:#0b1020; --card:#0f1724; --muted:#9aa4b2; --accent:#6ee7b7; --glass: rgba(255,255,255,0.04);
-      --glass-2: rgba(255,255,255,0.03); --danger:#ff6b6b;
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quick Tools - Premium Glass</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: linear-gradient(135deg, #0f0f0f, #1a1a1a);
+        color: white;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-height: 100vh;
     }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0; background:linear-gradient(180deg,var(--bg),#071025); color:#e6eef3; -webkit-font-smoothing:antialiased;
-      display:flex; align-items:center; justify-content:center; padding:20px;
+    header {
+        font-size: 2em;
+        margin: 20px;
+        font-weight: bold;
+        color: gold;
+        text-shadow: 0 0 10px rgba(255, 215, 0, 0.7);
     }
-    .container{
-      width:100%; max-width:960px; border-radius:14px; background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-      box-shadow: 0 10px 30px rgba(3,8,23,0.6); overflow:hidden; display:grid; grid-template-columns:1fr 360px; gap:0;
+    .container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 20px;
+        width: 90%;
+        max-width: 1200px;
     }
-    @media (max-width:880px){ .container{ grid-template-columns: 1fr; } .sidebar{ order:2 } }
-
-    /* Sidebar */
-    .sidebar{ background:linear-gradient(180deg,var(--card), #0b1220); padding:22px; border-left:1px solid rgba(255,255,255,0.02);} 
-    .brand{ display:flex; align-items:center; gap:12px; margin-bottom:18px }
-    .logo{ width:44px; height:44px; border-radius:10px; background:linear-gradient(135deg,var(--accent),#5dd3ff); display:flex; align-items:center; justify-content:center; font-weight:700; color:#042; box-shadow:0 6px 18px rgba(46,229,175,0.08);}
-    .brand h1{ font-size:18px; margin:0 }
-    .brand p{ margin:0; color:var(--muted); font-size:13px }
-
-    .nav{ display:flex; flex-direction:column; gap:10px; margin-top:6px }
-    .nav button{ background:transparent; border:1px solid transparent; color:var(--muted); text-align:left; padding:12px; border-radius:10px; cursor:pointer; font-size:15px }
-    .nav button.active{ color:var(--accent); background:linear-gradient(90deg, rgba(110,231,183,0.06), rgba(93,211,255,0.02)); border-color:rgba(110,231,183,0.06); box-shadow:0 6px 18px rgba(16,28,38,0.6) }
-
-    .meta{ margin-top:18px; color:var(--muted); font-size:13px }
-    .ad-slot{ margin-top:16px; border-radius:12px; background:var(--glass); padding:12px; text-align:center; color:var(--muted); font-size:13px }
-
-    /* Main area */
-    .main{ padding:28px; }
-    .tools-top{ display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:18px }
-    .title{ font-size:20px; margin:0 }
-    .subtitle{ color:var(--muted); font-size:13px }
-
-    .card{ background:var(--card); border-radius:12px; padding:18px; box-shadow: inset 0 1px 0 rgba(255,255,255,0.02); }
-    .tool-area{ margin-top:14px }
-
-    /* Stopwatch */
-    .display{ font-family: 'Segoe UI', Roboto, Helvetica, Arial; font-weight:700; letter-spacing:0.7px; font-size:48px; text-align:center }
-    .controls{ display:flex; gap:10px; justify-content:center; margin-top:14px }
-    .btn{ background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border:1px solid rgba(255,255,255,0.03); padding:10px 14px; border-radius:10px; cursor:pointer; color:var(--accent); font-weight:600 }
-    .btn.secondary{ color:var(--muted); border-style:dashed }
-    .btn.danger{ color:var(--danger) }
-
-    /* Tap counter */
-    .counter-number{ font-size:64px; font-weight:800; text-align:center; margin:8px 0 }
-    .counter-grid{ display:grid; grid-template-columns: repeat(3,1fr); gap:8px }
-
-    /* Age calc */
-    .form-row{ display:flex; gap:8px; align-items:center; margin-top:10px }
-    .form-row input, .form-row select{ background:transparent; border:1px solid rgba(255,255,255,0.04); padding:10px; border-radius:8px; color:inherit }
-    .result-block{ margin-top:12px; padding:12px; border-radius:8px; background:var(--glass-2); color:var(--accent); font-weight:700 }
-
-    /* Timer */
-    .small{ font-size:14px }
-
-    /* Footer */
-    .footer{ margin-top:18px; color:var(--muted); font-size:13px; text-align:center }
-
-    /* subtle animations */
-    .fade-in{ animation:fadeIn .3s ease both }
-    @keyframes fadeIn{ from{ opacity:0; transform: translateY(6px)} to{opacity:1; transform:none} }
-
-    /* helper */
-    .hidden{ display:none }
-
-    /* Accessibility focus */
-    button:focus, input:focus{ outline: 3px solid rgba(110,231,183,0.08); outline-offset:2px }
-
-    /* small screens adjustments */
-    @media (max-width:420px){ .display{ font-size:36px } .counter-number{ font-size:48px } }
-  </style>
+    .tool {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 15px;
+        padding: 20px;
+        text-align: center;
+        backdrop-filter: blur(10px);
+        box-shadow: 0 0 20px rgba(255, 215, 0, 0.1);
+    }
+    button {
+        background: gold;
+        color: black;
+        border: none;
+        padding: 10px 20px;
+        margin: 5px;
+        border-radius: 10px;
+        font-size: 1em;
+        cursor: pointer;
+        font-weight: bold;
+    }
+    button:hover {
+        background: orange;
+    }
+    .big-button {
+        font-size: 1.5em;
+        padding: 20px 40px;
+        border-radius: 15px;
+        background: gold;
+        box-shadow: 0 0 20px gold;
+    }
+    input {
+        padding: 8px;
+        margin: 5px;
+        border-radius: 5px;
+        border: none;
+        outline: none;
+    }
+    .display {
+        font-size: 1.5em;
+        margin: 10px 0;
+    }
+</style>
 </head>
 <body>
-  <div class="container">
-    <div class="main">
-      <div class="tools-top">
-        <div>
-          <h2 class="title">QuickTools</h2>
-          <div class="subtitle">Stopwatch · Tap Counter · Age Calculator · Countdown Timer</div>
-        </div>
-        <div style="display:flex;gap:10px;align-items:center">
-          <select id="themeSelect" class="small" aria-label="Theme selector">
-            <option value="dark">Dark</option>
-            <option value="light">Light</option>
-          </select>
-          <button id="shareBtn" class="btn secondary small">Share</button>
-        </div>
-      </div>
 
-      <!-- TOOL: Stopwatch -->
-      <section id="stopwatch" class="card tool fade-in">
-        <div style="display:flex;justify-content:space-between;align-items:center">
-          <h3 style="margin:0">Stopwatch</h3>
-          <div style="color:var(--muted);font-size:13px">Precision: ms</div>
-        </div>
-        <div class="tool-area">
-          <div id="swDisplay" class="display">00:00:00.000</div>
-          <div class="controls">
-            <button id="swStart" class="btn">Start</button>
-            <button id="swLap" class="btn secondary">Lap</button>
-            <button id="swStop" class="btn danger">Stop</button>
-            <button id="swReset" class="btn secondary">Reset</button>
-          </div>
-          <div id="laps" style="margin-top:12px; max-height:140px; overflow:auto"></div>
-        </div>
-      </section>
+<header>⚡ Quick Tools - Premium Glass</header>
 
-      <!-- TOOL: Tap Counter -->
-      <section id="counter" class="card tool fade-in" style="margin-top:16px">
-        <div style="display:flex;justify-content:space-between;align-items:center">
-          <h3 style="margin:0">Tap Counter</h3>
-          <div style="color:var(--muted);font-size:13px">Quick counting / events</div>
-        </div>
-        <div class="tool-area">
-          <div class="counter-number" id="countNum">0</div>
-          <div class="counter-grid">
-            <button id="tapBtn" class="btn" style="font-size:18px;padding:18px">Tap</button>
-            <button id="add10" class="btn">+10</button>
-            <button id="add100" class="btn">+100</button>
-            <button id="undo" class="btn secondary">Undo</button>
-            <button id="setZero" class="btn danger">Reset</button>
-            <button id="exportCSV" class="btn secondary">Export</button>
-          </div>
-        </div>
-      </section>
+<div class="container">
 
-      <!-- TOOL: Age Calculator -->
-      <section id="agecalc" class="card tool fade-in" style="margin-top:16px">
-        <div style="display:flex;justify-content:space-between;align-items:center">
-          <h3 style="margin:0">Age Calculator</h3>
-          <div style="color:var(--muted);font-size:13px">Find age from DOB</div>
-        </div>
-        <div class="tool-area">
-          <div class="form-row">
-            <input id="dob" type="date" aria-label="Date of birth" />
-            <button id="calcAge" class="btn">Calculate</button>
-          </div>
-          <div id="ageResult" class="result-block hidden"></div>
-        </div>
-      </section>
-
-      <!-- TOOL: Timer / Countdown -->
-      <section id="timer" class="card tool fade-in" style="margin-top:16px">
-        <div style="display:flex;justify-content:space-between;align-items:center">
-          <h3 style="margin:0">Countdown Timer</h3>
-          <div style="color:var(--muted);font-size:13px">Set target time</div>
-        </div>
-        <div class="tool-area">
-          <div class="form-row">
-            <input id="hours" placeholder="HH" maxlength="2" style="width:64px" />
-            <input id="minutes" placeholder="MM" maxlength="2" style="width:64px" />
-            <input id="seconds" placeholder="SS" maxlength="2" style="width:64px" />
-            <button id="startTimer" class="btn">Start</button>
-            <button id="stopTimer" class="btn secondary">Stop</button>
-            <button id="resetTimer" class="btn danger">Reset</button>
-          </div>
-          <div id="timerDisplay" class="display" style="margin-top:12px">00:00:00</div>
-        </div>
-      </section>
-
-      <div class="footer">Built for speed — Copy & paste to host. Ads placement area available on sidebar.</div>
+    <!-- Stopwatch -->
+    <div class="tool">
+        <h2>⏱ Stopwatch</h2>
+        <div class="display" id="stopwatch">00:00:00</div>
+        <button onclick="startStopwatch()">Start</button>
+        <button onclick="stopStopwatch()">Stop</button>
+        <button onclick="resetStopwatch()">Reset</button>
     </div>
 
-    <!-- Sidebar -->
-    <aside class="sidebar">
-      <div class="brand">
-        <div class="logo">QT</div>
-        <div>
-          <h3 style="margin:0">QuickTools</h3>
-          <p>Simple. Fast. Premium.</p>
-        </div>
-      </div>
+    <!-- Tap Counter -->
+    <div class="tool">
+        <h2>👆 Tap Counter</h2>
+        <div class="display" id="tapCount">0</div>
+        <button class="big-button" onclick="tap()">TAP</button>
+        <button onclick="resetTap()">Reset</button>
+    </div>
 
-      <nav class="nav" role="navigation" aria-label="Tools navigation">
-        <button class="active" data-target="stopwatch">Stopwatch</button>
-        <button data-target="counter">Tap Counter</button>
-        <button data-target="agecalc">Age Calculator</button>
-        <button data-target="timer">Countdown Timer</button>
-      </nav>
+    <!-- Age Calculator -->
+    <div class="tool">
+        <h2>🎂 Age Calculator</h2>
+        <input type="date" id="birthdate">
+        <button onclick="calculateAge()">Calculate</button>
+        <div class="display" id="ageResult">Your age will appear here</div>
+    </div>
 
-      <div class="meta">Customize the look: change <code>--accent</code> in :root, and update copy inside &lt;title&gt; &amp; &lt;meta&gt;.</div>
+    <!-- Countdown Timer -->
+    <div class="tool">
+        <h2>⏳ Countdown Timer</h2>
+        <input type="number" id="minutes" placeholder="Minutes">
+        <button onclick="startCountdown()">Start</button>
+        <div class="display" id="countdown">00:00</div>
+    </div>
 
-      <div class="ad-slot" aria-hidden="false">
-        <!-- ADSENSE PLACEHOLDER -->
-        <div style="font-size:13px">Ad slot (paste AdSense code here)</div>
-      </div>
+</div>
 
-      <div style="margin-top:12px; display:flex; gap:8px;">
-        <button id="importDemo" class="btn secondary small">Demo Data</button>
-        <button id="clearDemo" class="btn small">Clear</button>
-      </div>
-
-      <div style="margin-top:14px; color:var(--muted); font-size:13px">Tip: For higher CPC, share article pages about each tool and target English keywords.</div>
-    </aside>
-  </div>
-
-  <script>
-    // ---------- Helper & Theme ----------
-    const q = sel => document.querySelector(sel);
-    const qs = sel => document.querySelectorAll(sel);
-
-    // Theme switch (simple light/dark)
-    const themeSelect = q('#themeSelect');
-    themeSelect.addEventListener('change', e=>{
-      if(e.target.value === 'light'){
-        document.documentElement.style.setProperty('--bg','#f5f7fb');
-        document.documentElement.style.setProperty('--card','#ffffff');
-        document.documentElement.style.setProperty('--muted','#586274');
-        document.documentElement.style.setProperty('--accent','#0ea5a4');
-      } else {
-        document.documentElement.style.setProperty('--bg','#0b1020');
-        document.documentElement.style.setProperty('--card','#0f1724');
-        document.documentElement.style.setProperty('--muted','#9aa4b2');
-        document.documentElement.style.setProperty('--accent','#6ee7b7');
-      }
-    });
-
-    // Simple share — uses Web Share API when available
-    q('#shareBtn').addEventListener('click', async ()=>{
-      const url = location.href;
-      if(navigator.share){
-        try{ await navigator.share({ title: document.title, text: 'Try QuickTools — useful browser tools', url }); }
-        catch(e){}
-      } else { prompt('Copy link to share', url); }
-    });
-
-    // Navigation
-    qs('.nav button').forEach(btn=> btn.addEventListener('click', ()=>{
-      qs('.nav button').forEach(b=>b.classList.remove('active'));
-      btn.classList.add('active');
-      const t = btn.dataset.target;
-      qs('.tool').forEach(s=> s.classList.add('hidden'));
-      q('#'+t).classList.remove('hidden');
-      q('#'+t).scrollIntoView({behavior:'smooth', block:'center'});
-    }));
-
-    // ---------- STOPWATCH ----------
-    let swInterval = null; let swStartTime = 0; let swElapsed = 0; const swDisplay = q('#swDisplay'); const laps = q('#laps');
-    function formatTime(ms){
-      const msPart = String(ms % 1000).padStart(3,'0');
-      const totalSec = Math.floor(ms/1000);
-      const sec = totalSec % 60; const min = Math.floor(totalSec/60) % 60; const hr = Math.floor(totalSec/3600);
-      return `${String(hr).padStart(2,'0')}:${String(min).padStart(2,'0')}:${String(sec).padStart(2,'0')}.${msPart}`;
+<script>
+    // Stopwatch
+    let swInterval, swSeconds = 0;
+    function updateStopwatch() {
+        let hrs = String(Math.floor(swSeconds / 3600)).padStart(2, '0');
+        let mins = String(Math.floor((swSeconds % 3600) / 60)).padStart(2, '0');
+        let secs = String(swSeconds % 60).padStart(2, '0');
+        document.getElementById("stopwatch").textContent = `${hrs}:${mins}:${secs}`;
     }
-    function updateSWDisplay(){ swDisplay.textContent = formatTime(swElapsed + (swInterval ? Date.now()-swStartTime : 0)); }
-    q('#swStart').addEventListener('click', ()=>{
-      if(!swInterval){ swStartTime = Date.now(); swInterval = setInterval(updateSWDisplay, 33); q('#swStart').textContent='Running'; q('#swStart').disabled=false; }
-    });
-    q('#swStop').addEventListener('click', ()=>{
-      if(swInterval){ swElapsed += Date.now() - swStartTime; clearInterval(swInterval); swInterval = null; q('#swStart').textContent='Start'; updateSWDisplay(); }
-    });
-    q('#swReset').addEventListener('click', ()=>{ swElapsed = 0; if(swInterval){ swStartTime = Date.now(); } updateSWDisplay(); laps.innerHTML=''; });
-    q('#swLap').addEventListener('click', ()=>{
-      const text = formatTime(swElapsed + (swInterval ? Date.now()-swStartTime : 0));
-      const el = document.createElement('div'); el.textContent = text; el.style.padding='6px'; el.style.borderBottom='1px dashed rgba(255,255,255,0.02)'; laps.prepend(el);
-    });
-    // initialize display
-    swElapsed = 0; updateSWDisplay();
+    function startStopwatch() {
+        if (!swInterval) swInterval = setInterval(() => { swSeconds++; updateStopwatch(); }, 1000);
+    }
+    function stopStopwatch() {
+        clearInterval(swInterval);
+        swInterval = null;
+    }
+    function resetStopwatch() {
+        stopStopwatch();
+        swSeconds = 0;
+        updateStopwatch();
+    }
 
-    // ---------- TAP COUNTER ----------
-    let count = 0; const countNum = q('#countNum'); const history = [];
-    function refreshCount(){ countNum.textContent = count; }
-    q('#tapBtn').addEventListener('click', ()=>{ history.push(count); count += 1; refreshCount(); });
-    q('#add10').addEventListener('click', ()=>{ history.push(count); count += 10; refreshCount(); });
-    q('#add100').addEventListener('click', ()=>{ history.push(count); count += 100; refreshCount(); });
-    q('#undo').addEventListener('click', ()=>{ if(history.length){ count = history.pop(); refreshCount(); } });
-    q('#setZero').addEventListener('click', ()=>{ history.push(count); count = 0; refreshCount(); });
-    q('#exportCSV').addEventListener('click', ()=>{
-      const csv = 'value\n' + [count].join('\n');
-      const blob = new Blob([csv], {type:'text/csv'});
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a'); a.href = url; a.download = 'count.csv'; a.click(); URL.revokeObjectURL(url);
-    });
+    // Tap Counter
+    let taps = 0;
+    function tap() {
+        taps++;
+        document.getElementById("tapCount").textContent = taps;
+    }
+    function resetTap() {
+        taps = 0;
+        document.getElementById("tapCount").textContent = taps;
+    }
 
-    // ---------- AGE CALCULATOR ----------
-    q('#calcAge').addEventListener('click', ()=>{
-      const dobVal = q('#dob').value; if(!dobVal){ alert('Select your date of birth'); return; }
-      const dob = new Date(dobVal); const now = new Date(); if(dob>now){ alert('DOB is in future'); return; }
-      let years = now.getFullYear() - dob.getFullYear(); let months = now.getMonth() - dob.getMonth(); let days = now.getDate() - dob.getDate();
-      if(days<0){ months -=1; const prevMonth = new Date(now.getFullYear(), now.getMonth(), 0).getDate(); days += prevMonth; }
-      if(months<0){ years-=1; months+=12; }
-      q('#ageResult').classList.remove('hidden'); q('#ageResult').textContent = `${years} years, ${months} months, ${days} days`;
-    });
+    // Age Calculator
+    function calculateAge() {
+        let birthdate = document.getElementById("birthdate").value;
+        if (!birthdate) return alert("Please select your birth date!");
+        let diff = Date.now() - new Date(birthdate).getTime();
+        let ageDate = new Date(diff);
+        let age = Math.abs(ageDate.getUTCFullYear() - 1970);
+        document.getElementById("ageResult").textContent = `You are ${age} years old.`;
+    }
 
-    // ---------- COUNTDOWN TIMER ----------
-    let timerInterval = null; let timerRemaining = 0; const timerDisplay = q('#timerDisplay');
-    function formatClock(sec){ const h = Math.floor(sec/3600); const m = Math.floor((sec%3600)/60); const s = sec%60; return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`; }
-    q('#startTimer').addEventListener('click', ()=>{
-      const h = parseInt(q('#hours').value)||0; const m = parseInt(q('#minutes').value)||0; const s = parseInt(q('#seconds').value)||0; timerRemaining = h*3600 + m*60 + s; if(timerRemaining<=0){ alert('Set time > 0'); return; }
-      if(timerInterval) clearInterval(timerInterval);
-      timerDisplay.textContent = formatClock(timerRemaining);
-      timerInterval = setInterval(()=>{
-        timerRemaining -=1; timerDisplay.textContent = formatClock(timerRemaining);
-        if(timerRemaining<=0){ clearInterval(timerInterval); timerInterval=null; timerDisplay.textContent='00:00:00'; alert('Timer finished'); }
-      },1000);
-    });
-    q('#stopTimer').addEventListener('click', ()=>{ if(timerInterval){ clearInterval(timerInterval); timerInterval=null; } });
-    q('#resetTimer').addEventListener('click', ()=>{ if(timerInterval){ clearInterval(timerInterval); timerInterval=null; } timerRemaining=0; timerDisplay.textContent='00:00:00'; q('#hours').value=''; q('#minutes').value=''; q('#seconds').value=''; });
+    // Countdown Timer
+    let cdInterval;
+    function startCountdown() {
+        let mins = parseInt(document.getElementById("minutes").value);
+        if (isNaN(mins) || mins <= 0) return alert("Enter valid minutes!");
+        let seconds = mins * 60;
+        clearInterval(cdInterval);
+        cdInterval = setInterval(() => {
+            let m = String(Math.floor(seconds / 60)).padStart(2, '0');
+            let s = String(seconds % 60).padStart(2, '0');
+            document.getElementById("countdown").textContent = `${m}:${s}`;
+            if (seconds <= 0) {
+                clearInterval(cdInterval);
+                alert("Time's up!");
+            }
+            seconds--;
+        }, 1000);
+    }
+</script>
 
-    // ---------- Demo Data & Utility ----------
-    q('#importDemo').addEventListener('click', ()=>{ count=42; refreshCount(); q('#dob').value='1990-05-21'; q('#ageResult').classList.remove('hidden'); q('#ageResult').textContent='34 years, 2 months, 12 days'; });
-    q('#clearDemo').addEventListener('click', ()=>{ count=0; refreshCount(); q('#dob').value=''; q('#ageResult').classList.add('hidden'); });
-
-    // Accessibility: keyboard shortcuts
-    window.addEventListener('keydown', e=>{
-      if(e.key === ' ' && document.activeElement.tagName !== 'INPUT') { e.preventDefault(); document.getElementById('tapBtn').click(); }
-      if(e.key === 'l') q('#swLap').click();
-      if(e.key === 's') q('#swStart').click();
-      if(e.key === 'r') q('#swReset').click();
-    });
-
-    // Small: ensure first tool visible
-    qs('.tool').forEach((t,i)=> { if(i!==0) t.classList.add('hidden'); });
-  </script>
 </body>
 </html>
